@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+:root {
+    --theme-fonts-ui: 'Outfit', sans-serif;
+    --theme-fonts-mono: 'Menlo', monospace;
+    --theme-fonts-heading: 'Outfit', sans-serif;
+    --theme-fonts-content: 'Source Serif Pro', serif;
+
+    /* FIXME: necessary to prevent fouc for now */
+    --theme-colors-fg: #dddddd;
+    --theme-colors-dimmed: #aaaaaa;
+    --theme-colors-bg: #161616;
+    --theme-colors-area: #1e1e1e;
+    --theme-colors-accent: #5292d2;
+    --theme-colors-visited: #c690e8;
+    --theme-colors-error: #e15757;
+    --theme-colors-errorBg: #2d1d1d;
+    --theme-colors-quiz: #ffdf6b;
+    --theme-colors-guide: #7ad3ce;
+    --theme-colors-login: #eeeeee;
+    --theme-colors-discord: #6c76ea;
+    --theme-colors-upgrade: #e6b073;
+    --theme-colors-exercise: #9dd357;
+    --theme-colors-ground: #2f344a;
+}
+
+body, #root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: var(--theme-fonts-ui);
+    color: var(--theme-colors-fg);
+    background-color: var(--theme-colors-bg);
+}
