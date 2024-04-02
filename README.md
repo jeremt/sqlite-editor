@@ -4,6 +4,8 @@ A simple in-browser SQL editor to test to SQL queries easily.
 
 Try it [here](https://sqlite-editor.vercel.app).
 
+![demo](https://github.com/jeremt/sqlite-editor/assets/1913169/6390aaeb-09bd-4d82-a18d-356ebceb450d)
+
 ## Why this? 🤔
 
 The other day, I did a introductory workshop about SQL.
