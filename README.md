@@ -22,12 +22,12 @@ I might improve it later but feel free to use it or contribute 😎
 
 ## TODO
 
-- Allow to import .sql scripts
-- Enable autocomplete based on db schema
-- Show errors directly in editor with tooltip
-- Create tables from UI
-- Add/Remove/Edit columns from UI
-- Add rows from UI
-- Make everthing less ugly
+-   [ ] Allow to import .sql or .csv to fill a given table
+-   [ ] Enable autocomplete based on db schema
+-   [ ] Show errors directly in editor with tooltip
+-   [ ] Add help dialog with basic SQL queries
+-   [ ] Maybe also postgres instead of sqlite (https://github.com/electric-sql/pglite)
+-   [ ] Add light mode ☀️
+-   [ ] Add export (just the tables schema or with the data)
 
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXp6ZzFpYTNtMnF2Mjdvc3p0aTA4a3A4cmE0ZHpnbDVjcGVsN2ZjZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xUPOqo6E1XvWXwlCyQ/giphy.gif)

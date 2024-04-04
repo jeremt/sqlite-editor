@@ -5,19 +5,23 @@
     import FeatherIcon from '$lib/components/FeatherIcon.svelte';
     import Button from '$lib/components/Button.svelte';
     import Table from '$lib/components/Table.svelte';
+    import GithubIcon from '$lib/components/GithubIcon.svelte';
 
     let value: string;
     let sql: string;
 
-    let db: any;
+    let db: any; // TODO: stop being lazy and fix this type 😅
 
     let tables: string[] = [];
     let selectedTableName: string | undefined = undefined;
+    let selectedTableHeader: {name: string; type: string}[] | undefined = undefined;
     let selectedTable: Record<string, any>[] = [];
     $: updateSchema(selectedTableName);
 
     let result: Record<string, any>[] = [];
-    let error: string;
+    let error = '';
+    let isClear = true;
+    let executionTime = '';
 
     onMount(async () => {
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
@@ -27,18 +31,32 @@
     });
 
     function runQuery() {
+        result = [];
+        error = '';
         try {
             const start = performance.now();
             result = db.exec(sql, {rowMode: 'object'});
             const time = performance.now() - start;
-            console.log(`${sql} (${time.toFixed(1)}ms)`);
+            executionTime = `executed in ${time.toFixed(1)}ms`;
             updateSchema(selectedTableName);
         } catch (err) {
             error = (err as Error).message;
+        } finally {
+            isClear = false;
         }
     }
 
+    function clearResult() {
+        result = [];
+        error = '';
+        isClear = true;
+        executionTime = '';
+    }
+
     function updateSchema(tableName?: string) {
+        if (!db) {
+            return;
+        }
         try {
             tables = db
                 .exec(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;`, {rowMode: 'object'})
@@ -46,20 +64,24 @@
                 .filter((name: string) => name !== 'sqlite_sequence');
             tableName = tableName ?? tables[0];
             if (tableName) {
-                const infos = db.exec(`PRAGMA table_info('${tableName}');`, {rowMode: 'object'});
                 const rows = db.exec(`SELECT * from "${tableName}"`, {rowMode: 'object'});
                 selectedTable = rows;
-                console.log(infos);
+                selectedTableHeader = getTableHeader(tableName);
             }
         } catch (e) {
             console.warn('Failed to update schema: ', (e as Error).message);
         }
     }
+
+    function getTableHeader(tableName: string) {
+        const infos = db.exec(`PRAGMA table_info('${tableName}');`, {rowMode: 'object'});
+        return infos.map(({pk, name, type}: Record<string, any>) => ({name: `${pk === 1 ? '🔑 ' : ''}${name}`, type}));
+    }
 </script>
 
 <header>
     <h1><FeatherIcon /> SQLite editor</h1>
-    <Button on:click={runQuery}>Run query</Button>
+    <a href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon color="var(--theme-colors-fg)" /></a>
 </header>
 <main>
     <div id="left">
@@ -75,8 +97,6 @@
                     switch (event.detail.path) {
                         case 'default.sql':
                             sql = event.detail.value;
-                            result = [];
-                            error = '';
                             break;
                         default:
                             throw new Error(`File ${event.detail.path} not found.`);
@@ -84,13 +104,20 @@
                 }}
             />
         </div>
+        <div id="toolbar">
+            <Button --font-size="0.75rem" --color="var(--theme-colors-fg)" on:click={runQuery}>RUN QUERY</Button>
+            <Button --font-size="0.75rem" --fg="var(--theme-colors-fg)" --color="var(--theme-colors-area)" on:click={clearResult}>CLEAR</Button>
+            {executionTime}
+        </div>
         <div id="result">
-            {#if error}
-                <div id="error">{error}</div>
-            {:else if result.length === 0}
-                <div id="success">Success. No rows returned</div>
-            {:else}
+            {#if error !== ''}
+                <div class="error">{error}</div>
+            {:else if result.length > 0}
                 <Table data={result} />
+            {:else if !isClear}
+                <div class="info">Success. No rows returned</div>
+            {:else}
+                <div class="info">Click <strong>RUN QUERY</strong> to execute your SQL query.</div>
             {/if}
         </div>
     </div>
@@ -102,7 +129,7 @@
                 {/each}
             </select>
             {#if selectedTable.length}
-                <Table data={selectedTable} />
+                <Table header={selectedTableHeader} data={selectedTable} />
             {:else}
                 <p>The table {selectedTable} is empty.</p>
             {/if}
@@ -137,6 +164,8 @@ INSERT INTO users (name, email) VALUES
     }
     main {
         width: 100%;
+        max-width: 100rem;
+        margin: auto;
         display: flex;
         overflow: hidden;
         flex-grow: 1;
@@ -156,14 +185,30 @@ INSERT INTO users (name, email) VALUES
     #editor {
         flex-grow: 1;
     }
+
+    #toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--theme-colors-dimmed);
+    }
     #result {
         height: 20rem;
         background-color: var(--theme-colors-area);
         padding: 1rem;
         overflow: auto;
     }
-    #error {
+    .error {
         color: var(--theme-colors-error);
+    }
+    .info {
+        color: var(--theme-colors-dimmed);
+    }
+    .info > strong {
+        color: var(--theme-colors-fg);
+        font-size: 0.8rem;
+        padding: 0 0.3rem;
     }
     select {
         border: none;
