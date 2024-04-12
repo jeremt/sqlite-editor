@@ -26,23 +26,18 @@
 </table>
 
 <style>
-    table {
-        border-collapse: collapse;
-    }
-
     th,
     td {
         text-align: start;
         padding: 0.5rem 1rem;
-        border: 1px solid var(--theme-colors-dimmed);
     }
 
     th > .type {
-        color: var(--theme-colors-dimmed);
+        color: var(--color-muted);
         font-size: 0.7rem;
         padding-left: 0.3rem;
     }
     td {
-        color: var(--theme-colors-dimmed);
+        color: var(--color-muted);
     }
 </style>

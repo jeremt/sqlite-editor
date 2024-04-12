@@ -132,6 +132,8 @@
         });
     });
 
+    $: Monaco?.editor.setTheme(theme);
+
     // load model when selected file changes
     $: if (editor) {
         const model = Monaco.editor.getModels().find((m) => m.uri.path === `/${selectedFile}`);

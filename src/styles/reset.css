@@ -1,0 +1,40 @@
+/* Sensible defaults for elements */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+a[role='button'],
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5em;
+    padding: 0.8em 1em;
+    font-size: var(--font-size, 0.85rem);
+
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+}
+
+select {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 0.8em 1em;
+    margin-bottom: 1rem;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: start;
+    padding: 0.5rem 1rem;
+}

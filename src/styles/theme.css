@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+:root {
+    --font-ui: 'Outfit', sans-serif; /* The font that is mainly used on the website */
+    --font-mono: 'Menlo', monospace; /* Used for code */
+    --font-heading: 'Outfit', sans-serif; /* Used for titles and headings */
+    --font-content: 'Source Serif Pro', serif; /* Used for longer text content like articles */
+}
+
+html[color-scheme='dark'] {
+    --color-fg: #dddddd; /* The main neutral color used for important texts and icons */
+    --color-muted: #aaaaaa; /* Similar to fg but for slightly less important texts */
+    --color-bg: #161616; /* The main background color of the website */
+    --color-area: #1e1e1e; /* Used for areas like cards to separate from the background */
+    --color-border: #303030; /* A little more contrasted than area, used for smaller things like lines */
+    --color-primary: #5292d2; /* The main color, usually your brand color it can be used for stuffs like links and buttons */
+    --color-link-visited: #c690e8; /* Used for already visisted link, usually some kind of purple */
+    --color-error: #e15757; /* Used for errors, usually some kind of red */
+    --color-error-bg: #2d1d1d; /* Used to contrast with the  */
+
+    /* Custom semantique colors */
+    --color-quiz: #ffdf6b;
+    --color-guide: #7ad3ce;
+    --color-github: #eeeeee;
+    --color-discord: #6c76ea;
+    --color-upgrade: #e6b073;
+    --color-exercise: #9dd357;
+}
+
+html[color-scheme='light'] {
+    --color-fg: #292e3a; /* The main neutral color used for important texts and icons */
+    --color-muted: #646484; /* Similar to fg but for slightly less important texts */
+    --color-bg: #e0e5f2; /* The main background color of the website */
+    --color-area: #ffffff; /* Used for areas like cards to separate from the background */
+    --color-border: #c4c4df; /* A little more contrasted than area, used for smaller things like lines */
+    --color-primary: #1c8ade; /* The main color, usually your brand color it can be used for stuffs like links and buttons */
+    --color-link-visited: #9d53e2; /* Used for already visisted link, usually some kind of purple */
+    --color-error: #d13434; /* Used for errors, usually some kind of red */
+    --color-error-bg: #eac5c5; /* Used to contrast with the  */
+
+    /* Custom semantique colors */
+    --color-quiz: #f7bb25;
+    --color-guide: #25d4cb;
+    --color-github: #31363f;
+    --color-discord: #5765f2;
+    --color-upgrade: #d7a560;
+    --color-exercise: #80c427;
+}

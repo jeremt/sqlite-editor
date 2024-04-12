@@ -1,0 +1,10 @@
+body,
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: var(--font-ui);
+    color: var(--color-fg);
+    background-color: var(--color-bg);
+}

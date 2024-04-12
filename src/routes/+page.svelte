@@ -2,10 +2,11 @@
     import MonacoEditor from '$lib/editor/MonacoEditor.svelte';
     import type {SQLite3} from '$lib/sqlite/sqlite3';
     import {onMount} from 'svelte';
-    import FeatherIcon from '$lib/components/FeatherIcon.svelte';
-    import Button from '$lib/components/Button.svelte';
+    import FeatherIcon from '$lib/icons/FeatherIcon.svelte';
     import Table from '$lib/components/Table.svelte';
-    import GithubIcon from '$lib/components/GithubIcon.svelte';
+    import GithubIcon from '$lib/icons/GithubIcon.svelte';
+    import ColorSchemeToggle from '$lib/color-scheme/ColorSchemeToggle.svelte';
+    import {colorScheme} from '$lib/color-scheme/store';
 
     let value: string;
     let sql: string;
@@ -81,13 +82,14 @@
 
 <header>
     <h1><FeatherIcon /> SQLite editor</h1>
-    <a href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon color="var(--theme-colors-fg)" /></a>
+    <ColorSchemeToggle />
+    <a role="button" class="circle" href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon /></a>
 </header>
 <main>
     <div id="left">
         <div id="editor">
             <MonacoEditor
-                theme="dark"
+                theme={$colorScheme}
                 fontSize={14}
                 files={[{path: 'default.sql', value: ``}]}
                 selectedFile="default.sql"
@@ -105,8 +107,8 @@
             />
         </div>
         <div id="toolbar">
-            <Button --font-size="0.75rem" --color="var(--theme-colors-fg)" on:click={runQuery}>RUN QUERY</Button>
-            <Button --font-size="0.75rem" --fg="var(--theme-colors-fg)" --color="var(--theme-colors-area)" on:click={clearResult}>CLEAR</Button>
+            <button style:--font-size="0.75rem" on:click={runQuery}>RUN QUERY ⌘⏎</button>
+            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>CLEAR</button>
             {executionTime}
         </div>
         <div id="result">
@@ -136,17 +138,18 @@
         {:else}
             <p>No tables created yet. You can create one by copying this into the editor and clicking on <strong>RUN QUERY</strong>.</p>
             <pre><code
-                    >-- Create a user table
+                    >-- Create a simple user table
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE
 );
--- Insert 3 users into the table
+-- Insert 4 famous in tech women into the table
 INSERT INTO users (name, email) VALUES
   ('Ada', 'ada@codepassport.dev'),
   ('Grace', 'grace@codepassport.dev'),
-  ('Dorothy', 'dorothy@codepassport.dev');</code
+  ('Dorothy', 'dorothy@codepassport.dev'),
+  ('Vi', 'vi@codepassport.dev');</code
                 ></pre>
         {/if}
     </div>
@@ -155,12 +158,13 @@ INSERT INTO users (name, email) VALUES
 <style>
     header {
         display: flex;
-        padding: 0.2rem 1rem;
+        gap: 0.75rem;
+        padding: 0.5rem 2rem;
         align-items: center;
-        justify-content: space-between;
     }
     h1 {
         font-size: 1.3rem;
+        margin-right: auto;
     }
     main {
         width: 100%;
@@ -191,40 +195,35 @@ INSERT INTO users (name, email) VALUES
         gap: 0.5rem;
         align-items: center;
         font-size: 0.9rem;
-        color: var(--theme-colors-dimmed);
+        color: var(--color-dimmed);
     }
     #result {
         height: 20rem;
-        background-color: var(--theme-colors-area);
+        background-color: var(--color-area);
         padding: 1rem;
         overflow: auto;
     }
     .error {
-        color: var(--theme-colors-error);
+        color: var(--color-error);
     }
     .info {
-        color: var(--theme-colors-dimmed);
+        color: var(--color-muted);
     }
     .info > strong {
-        color: var(--theme-colors-fg);
+        color: var(--color-fg);
         font-size: 0.8rem;
         padding: 0 0.3rem;
     }
-    select {
-        border: none;
-        padding: 0.5rem 1rem;
-        margin-bottom: 1rem;
-        outline: none;
-    }
+
     p {
         margin: 0;
-        color: var(--theme-colors-dimmed);
+        color: var(--color-muted);
         & strong {
-            color: var(--theme-colors-fg);
+            color: var(--color-fg);
         }
     }
     pre {
-        padding: 1rem;
-        background-color: var(--theme-colors-area);
+        padding: 1.5rem;
+        background-color: var(--color-area);
     }
 </style>
