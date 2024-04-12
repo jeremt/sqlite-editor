@@ -33,8 +33,14 @@ button {
     /* padding should only be based on text not icons */
     & > svg {
         margin: -1rem 0;
-        color: var(--fg, var(--color-area));
     }
+}
+
+a[role='button'] > svg,
+button > svg,
+a[role='button'].circle > svg,
+button.circle > svg {
+    color: var(--fg, var(--color-area));
 }
 
 a[role='button'].circle,

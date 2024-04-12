@@ -2,7 +2,7 @@
     import MonacoEditor from '$lib/editor/MonacoEditor.svelte';
     import type {SQLite3} from '$lib/sqlite/sqlite3';
     import {onMount} from 'svelte';
-    import FeatherIcon from '$lib/icons/FeatherIcon.svelte';
+    import FeatherIcon from '$lib/icons/LogoIcon.svelte';
     import Table from '$lib/components/Table.svelte';
     import GithubIcon from '$lib/icons/GithubIcon.svelte';
     import ColorSchemeToggle from '$lib/color-scheme/ColorSchemeToggle.svelte';
