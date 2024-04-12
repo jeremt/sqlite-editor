@@ -23,6 +23,7 @@
     let error = '';
     let isClear = true;
     let executionTime = '';
+    let selection = '';
 
     onMount(async () => {
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
@@ -36,7 +37,7 @@
         error = '';
         try {
             const start = performance.now();
-            result = db.exec(sql, {rowMode: 'object'});
+            result = db.exec(selection !== '' ? selection : sql, {rowMode: 'object'});
             const time = performance.now() - start;
             executionTime = `executed in ${time.toFixed(1)}ms`;
             updateSchema(selectedTableName);
@@ -80,6 +81,16 @@
     }
 </script>
 
+<svelte:head>
+    <title>Sqlite Editor</title>
+    <meta name="description" content="A very simple online SQL editor, with a local database." />
+    <meta property="og:title" content="Sqlite Editor" />
+    <meta property="og:site_name" content="Sqlite Editor" />
+    <meta property="og:image" content="/thumbnail.png" />
+    <meta property="og:url" content="https://simple-sqlite-editor.vercel.app" />
+    <meta property="og:description" content="A very simple online SQL editor with a local database." />
+</svelte:head>
+
 <header>
     <h1><FeatherIcon /> SQLite editor</h1>
     <ColorSchemeToggle />
@@ -94,7 +105,9 @@
                 files={[{path: 'default.sql', value: ``}]}
                 selectedFile="default.sql"
                 bind:value
+                bind:selection
                 debounce={300}
+                on:run={runQuery}
                 on:change={(event) => {
                     switch (event.detail.path) {
                         case 'default.sql':
@@ -107,7 +120,7 @@
             />
         </div>
         <div id="toolbar">
-            <button style:--font-size="0.75rem" on:click={runQuery}>RUN QUERY ⌘⏎</button>
+            <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? 'RUN' : 'RUN SELECTION'} ⇧⏎</button>
             <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>CLEAR</button>
             {executionTime}
         </div>
@@ -119,7 +132,7 @@
             {:else if !isClear}
                 <div class="info">Success. No rows returned</div>
             {:else}
-                <div class="info">Click <strong>RUN QUERY</strong> to execute your SQL query.</div>
+                <div class="info">Use <strong>RUN ⇧⏎</strong> to execute your SQL query.</div>
             {/if}
         </div>
     </div>
@@ -136,7 +149,7 @@
                 <p>The table {selectedTable} is empty.</p>
             {/if}
         {:else}
-            <p>No tables created yet. You can create one by copying this into the editor and clicking on <strong>RUN QUERY</strong>.</p>
+            <p>No tables created yet. You can create one by copying this into the editor and clicking on <strong>RUN ⇧⏎</strong>.</p>
             <pre><code
                     >-- Create a simple user table
 CREATE TABLE users (

@@ -44,6 +44,11 @@
     export let debounce: number = 0;
 
     /**
+     * The currently selected text.
+     */
+    export let selection = '';
+
+    /**
      * Whether emmet should be enabled.
      */
     // export let emmet = true;
@@ -52,7 +57,7 @@
     let editor: monaco.editor.IStandaloneCodeEditor;
     let Monaco: typeof monaco;
 
-    const dispatch = createEventDispatcher<{change: FileData}>();
+    const dispatch = createEventDispatcher<{change: FileData; run: void}>();
 
     // @ts-ignore fuck you node
     let debounceTimer: NodeJS.Timeout;
@@ -120,6 +125,25 @@
                 dispatch('change', {path: selectedFile, value: editor.getValue()});
             }, debounce);
         });
+
+        editor.addAction({
+            id: 'run',
+            keybindings: [Monaco.KeyMod.Shift | Monaco.KeyCode.Enter],
+            label: 'Run',
+            run: () => {
+                dispatch('run');
+            },
+        });
+
+        editor.onDidChangeCursorSelection((event) => {
+            const model = editor.getModel();
+            if (model === null) {
+                return;
+            }
+            selection = model.getValueInRange(event.selection);
+        });
+
+        editor.focus();
 
         return () => {
             editor.dispose();
