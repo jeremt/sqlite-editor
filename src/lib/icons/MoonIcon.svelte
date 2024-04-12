@@ -10,6 +10,5 @@
 <style>
     svg {
         width: var(--size, 1.3rem);
-        color: var(--color, var(--color-fg));
     }
 </style>

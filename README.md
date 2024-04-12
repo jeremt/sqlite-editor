@@ -20,14 +20,8 @@ I'm also working on a [website to learn code](https://codepassport.dev) to I alr
 
 I might improve it later but feel free to use it or contribute 😎
 
-## TODO
+## How to contribute? 👀
 
--   [ ] Allow to import .sql or .csv to fill a given table
--   [ ] Enable autocomplete based on db schema
--   [ ] Show errors directly in editor with tooltip
--   [ ] Add help dialog with basic SQL queries
--   [ ] Maybe also postgres instead of sqlite (https://github.com/electric-sql/pglite)
--   [ ] Add light mode ☀️
--   [ ] Add export (just the tables schema or with the data)
+There is no specific guidance since it's a quite small project. If you find have an idea or find a bug you can create an issue or better yet open a pull request fixing the issue 😏
 
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXp6ZzFpYTNtMnF2Mjdvc3p0aTA4a3A4cmE0ZHpnbDVjcGVsN2ZjZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xUPOqo6E1XvWXwlCyQ/giphy.gif)

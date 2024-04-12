@@ -8,6 +8,5 @@
 <style>
     svg {
         width: var(--size, 1.6rem);
-        color: var(--color, var(--color-fg));
     }
 </style>

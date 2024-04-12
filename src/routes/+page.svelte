@@ -1,21 +1,22 @@
 <script lang="ts">
     import MonacoEditor from '$lib/editor/MonacoEditor.svelte';
-    import type {SQLite3} from '$lib/sqlite/sqlite3';
+    import type {DB, SQLite3, TableInfoColumn} from '$lib/sqlite/sqlite3';
     import {onMount} from 'svelte';
     import FeatherIcon from '$lib/icons/LogoIcon.svelte';
-    import Table from '$lib/components/Table.svelte';
+    import SQLTable from '$lib/components/SQLTable.svelte';
     import GithubIcon from '$lib/icons/GithubIcon.svelte';
     import ColorSchemeToggle from '$lib/color-scheme/ColorSchemeToggle.svelte';
     import {colorScheme} from '$lib/color-scheme/store';
+    import TableIcon from '$lib/icons/TableIcon.svelte';
 
     let value: string;
     let sql: string;
 
-    let db: any; // TODO: stop being lazy and fix this type 😅
+    let db: DB | undefined;
 
     let tables: string[] = [];
     let selectedTableName: string | undefined = undefined;
-    let selectedTableHeader: {name: string; type: string}[] | undefined = undefined;
+    let selectedTableHeader: TableInfoColumn[] | undefined = undefined;
     let selectedTable: Record<string, any>[] = [];
     $: updateSchema(selectedTableName);
 
@@ -37,7 +38,7 @@
         error = '';
         try {
             const start = performance.now();
-            result = db.exec(selection !== '' ? selection : sql, {rowMode: 'object'});
+            result = db?.exec(selection !== '' ? selection : sql, {rowMode: 'object'});
             const time = performance.now() - start;
             executionTime = `executed in ${time.toFixed(1)}ms`;
             updateSchema(selectedTableName);
@@ -64,20 +65,19 @@
                 .exec(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;`, {rowMode: 'object'})
                 .map((row: {name: string}) => row.name)
                 .filter((name: string) => name !== 'sqlite_sequence');
-            tableName = tableName ?? tables[0];
-            if (tableName) {
-                const rows = db.exec(`SELECT * from "${tableName}"`, {rowMode: 'object'});
+            selectedTableName = tableName ?? tables[0];
+            if (selectedTableName) {
+                const rows = db.exec(`SELECT * from "${selectedTableName}"`, {rowMode: 'object'});
                 selectedTable = rows;
-                selectedTableHeader = getTableHeader(tableName);
+                selectedTableHeader = getTableHeader(selectedTableName);
             }
         } catch (e) {
             console.warn('Failed to update schema: ', (e as Error).message);
         }
     }
 
-    function getTableHeader(tableName: string) {
-        const infos = db.exec(`PRAGMA table_info('${tableName}');`, {rowMode: 'object'});
-        return infos.map(({pk, name, type}: Record<string, any>) => ({name: `${pk === 1 ? '🔑 ' : ''}${name}`, type}));
+    function getTableHeader(tableName: string): TableInfoColumn[] | undefined {
+        return db?.exec(`PRAGMA table_info('${tableName}');`, {rowMode: 'object'});
     }
 </script>
 
@@ -128,7 +128,7 @@
             {#if error !== ''}
                 <div class="error">{error}</div>
             {:else if result.length > 0}
-                <Table data={result} />
+                <SQLTable data={result} />
             {:else if !isClear}
                 <div class="info">Success. No rows returned</div>
             {:else}
@@ -138,16 +138,12 @@
     </div>
     <div id="right">
         {#if tables.length}
-            <select bind:value={selectedTableName}>
+            <div id="tables">
                 {#each tables as table}
-                    <option value={table}>{table}</option>
+                    <button class:selected={selectedTableName === table} on:click={() => (selectedTableName = table)}><TableIcon /> {table}</button>
                 {/each}
-            </select>
-            {#if selectedTable.length}
-                <Table header={selectedTableHeader} data={selectedTable} />
-            {:else}
-                <p>The table {selectedTable} is empty.</p>
-            {/if}
+            </div>
+            <SQLTable header={selectedTableHeader} data={selectedTable} />
         {:else}
             <p>No tables created yet. You can create one by copying this into the editor and clicking on <strong>RUN ⇧⏎</strong>.</p>
             <pre><code
@@ -226,6 +222,21 @@ INSERT INTO users (name, email) VALUES
         color: var(--color-fg);
         font-size: 0.8rem;
         padding: 0 0.3rem;
+    }
+
+    #tables {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        padding-bottom: 1rem;
+    }
+    #tables > button {
+        text-transform: lowercase;
+    }
+
+    #tables > button:not(.selected) {
+        --fg: var(--color-fg);
+        --bg: var(--color-area);
     }
 
     p {
