@@ -8,6 +8,9 @@
     import ColorSchemeToggle from '$lib/color-scheme/ColorSchemeToggle.svelte';
     import {colorScheme} from '$lib/color-scheme/store';
     import TableIcon from '$lib/icons/TableIcon.svelte';
+    import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
+
+    export let data;
 
     let value: string;
     let sql: string;
@@ -26,11 +29,13 @@
     let executionTime = '';
     let selection = '';
 
+    let isMounted = false; // prevent fouc
     onMount(async () => {
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
         const sqlite3: SQLite3 = await initSqlite();
         db = new sqlite3.oo1.DB(':localStorage:', 'ct');
         updateSchema();
+        isMounted = true;
     });
 
     function runQuery() {
@@ -144,27 +149,22 @@
                 {/each}
             </div>
             <SQLTable header={selectedTableHeader} data={selectedTable} />
-        {:else}
-            <p>No tables created yet. You can create one by copying this into the editor and clicking on <strong>RUN ⇧⏎</strong>.</p>
-            <pre><code
-                    >-- Create a simple user table
-CREATE TABLE users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL UNIQUE
-);
--- Insert 4 famous in tech women into the table
-INSERT INTO users (name, email) VALUES
-  ('Ada', 'ada@codepassport.dev'),
-  ('Grace', 'grace@codepassport.dev'),
-  ('Dorothy', 'dorothy@codepassport.dev'),
-  ('Vi', 'vi@codepassport.dev');</code
-                ></pre>
+        {:else if isMounted}
+            <article class="prose">{@html data.content}</article>
         {/if}
     </div>
 </main>
 
+<a href="https://codepassport.dev" target="_blank" class="badge">
+    <BadgeIcon />
+</a>
+
 <style>
+    .badge {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+    }
     header {
         display: flex;
         gap: 0.75rem;
@@ -237,17 +237,5 @@ INSERT INTO users (name, email) VALUES
     #tables > button:not(.selected) {
         --fg: var(--color-fg);
         --bg: var(--color-area);
-    }
-
-    p {
-        margin: 0;
-        color: var(--color-muted);
-        & strong {
-            color: var(--color-fg);
-        }
-    }
-    pre {
-        padding: 1.5rem;
-        background-color: var(--color-area);
     }
 </style>

@@ -1,4 +1,2 @@
+@import url(./styles/base.css);
 @import url(./styles/theme.css);
-@import url(./styles/global.css);
-@import url(./styles/reset.css);
-@import url(./styles/components.css);

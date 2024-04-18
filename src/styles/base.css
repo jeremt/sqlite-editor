@@ -38,3 +38,8 @@ td {
     text-align: start;
     padding: 0.5rem 1rem;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--col, 15rem), 1fr));
+}
