@@ -2,7 +2,8 @@
     import type monaco from 'monaco-editor';
     import {createEventDispatcher, onMount, onDestroy} from 'svelte';
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
-    // import sqlWorker from 'monaco-editor/esm/vs/basic-languages/sql/sql.contribution?worker';
+    import {shikiToMonaco} from '@shikijs/monaco';
+    import {getHighlighter} from 'shiki';
 
     /**
      * Represents a virtual file used by the editor.
@@ -74,31 +75,13 @@
         };
 
         Monaco = await import('monaco-editor');
-        // const {default: dracula} = await import(`monaco-themes/themes/Dracula.json`);
-        // Monaco.editor.defineTheme('dracula', dracula as monaco.editor.IStandaloneThemeData);
-        // npx monaco-vscode-textmate-theme-converter -i ./node_modules/shiki/themes/dark-plus.json -o dark-plus-monaco.json
 
-        // if (emmet) {
-        // 	const { emmetHTML, emmetCSS } = await import('emmet-monaco-es');
-        // 	emmetHTML(Monaco);
-        // 	emmetCSS(Monaco);
-        // }
-
-        Monaco.editor.defineTheme('dark', {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [],
-            colors: {},
+        const highlighter = await getHighlighter({
+            themes: ['dark-plus', 'light-plus'],
+            langs: ['sql'],
         });
 
-        Monaco.editor.defineTheme('light', {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {},
-        });
-
-        Monaco.editor.setTheme(theme);
+        shikiToMonaco(highlighter, Monaco);
 
         // generate mocano model for each file and create editor from selectedFile
         for (const file of files) {
@@ -107,7 +90,8 @@
             if (file.path === selectedFile) {
                 editor = Monaco.editor.create(divEl, {
                     model,
-                    language: ext === 'js' ? 'javascript' : ext,
+                    language: 'sql',
+                    theme: `${theme}-plus`,
                     fontSize,
                     minimap: {enabled: false},
                 });
@@ -156,7 +140,7 @@
         });
     });
 
-    $: Monaco?.editor.setTheme(theme);
+    $: Monaco?.editor.setTheme(`${theme}-plus`);
 
     // load model when selected file changes
     $: if (editor) {
@@ -197,6 +181,6 @@
 <style>
     .editor {
         height: 100%;
-        background-color: var(--theme-colors-area); /* FIXME: not generic, should be a prop */
+        background-color: var(--color-area);
     }
 </style>
