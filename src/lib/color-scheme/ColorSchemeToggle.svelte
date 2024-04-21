@@ -19,7 +19,7 @@
     }
 </script>
 
-<button class="circle" on:click={toggleColorScheme}>
+<button class="circle" aria-label={$colorScheme === 'dark' ? 'Light mode' : 'Dark mode'} on:click={toggleColorScheme}>
     {#if $colorScheme === 'dark'}
         <SunIcon />
     {:else}

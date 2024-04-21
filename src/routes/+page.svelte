@@ -99,7 +99,7 @@
 <header>
     <h1><FeatherIcon /> SQLite editor</h1>
     <ColorSchemeToggle />
-    <a role="button" class="circle" href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon /></a>
+    <a role="button" class="circle" aria-label="Project's github" href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon /></a>
 </header>
 <main>
     <div id="left">
