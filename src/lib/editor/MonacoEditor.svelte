@@ -119,6 +119,13 @@
             },
         });
 
+        editor.onKeyDown((event) => {
+            event.preventDefault();
+            if (event.keyCode === 49 /** KeyCode.KeyS */ && (event.ctrlKey || event.metaKey)) {
+                console.info("We don't do save, sorry 🤷");
+            }
+        });
+
         editor.onDidChangeCursorSelection((event) => {
             const model = editor.getModel();
             if (model === null) {
