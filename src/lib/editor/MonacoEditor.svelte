@@ -112,7 +112,7 @@
 
         editor.addAction({
             id: 'run',
-            keybindings: [Monaco.KeyMod.Shift | Monaco.KeyCode.Enter],
+            keybindings: [Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.Enter],
             label: 'Run',
             run: () => {
                 dispatch('run');

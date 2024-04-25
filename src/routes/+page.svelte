@@ -125,7 +125,9 @@
             />
         </div>
         <div id="toolbar">
-            <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? 'RUN' : 'RUN SELECTION'} ⇧⏎</button>
+            <button style:--font-size="0.75rem" on:click={runQuery}
+                >{selection === '' ? 'RUN' : 'RUN SELECTION'} {navigator.userAgent.indexOf('Mac OS') !== -1 ? '⌘' : 'Ctrl'}⏎</button
+            >
             <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>CLEAR</button>
             {executionTime}
         </div>
@@ -137,7 +139,7 @@
             {:else if !isClear}
                 <div class="info">Success. No rows returned</div>
             {:else}
-                <div class="info">Use <strong>RUN ⇧⏎</strong> to execute your SQL query.</div>
+                <div class="info">Use <strong>RUN {navigator.userAgent.indexOf('Mac OS') !== -1 ? '⌘' : 'Ctrl'}⏎</strong> to execute your SQL query.</div>
             {/if}
         </div>
     </div>
