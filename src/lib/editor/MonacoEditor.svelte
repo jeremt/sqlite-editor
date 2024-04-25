@@ -120,8 +120,8 @@
         });
 
         editor.onKeyDown((event) => {
-            event.preventDefault();
             if (event.keyCode === 49 /** KeyCode.KeyS */ && (event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
                 console.info("We don't do save, sorry 🤷");
             }
         });
