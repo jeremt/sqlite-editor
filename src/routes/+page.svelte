@@ -10,6 +10,9 @@
     import TableIcon from '$lib/icons/TableIcon.svelte';
     import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
     import {isMac} from '$lib/isMac.js';
+    import Dialog from '$lib/components/Dialog.svelte';
+    import Toggle from '$lib/components/Toggle.svelte';
+    import {generateDbSchema, getTableHeader} from '$lib/generateDbSchema.js';
 
     export let data;
 
@@ -75,15 +78,20 @@
             if (selectedTableName) {
                 const rows = db.exec(`SELECT * from "${selectedTableName}"`, {rowMode: 'object'});
                 selectedTable = rows;
-                selectedTableHeader = getTableHeader(selectedTableName);
+                selectedTableHeader = getTableHeader(db, selectedTableName);
             }
         } catch (e) {
             console.warn('Failed to update schema: ', (e as Error).message);
         }
     }
 
-    function getTableHeader(tableName: string): TableInfoColumn[] | undefined {
-        return db?.exec(`PRAGMA table_info('${tableName}');`, {rowMode: 'object'});
+    let downloadLink: HTMLAnchorElement | null;
+    let downloadOpen = false;
+    let dbSchema = '';
+    let includeData = true;
+    $: dbSchema = db ? generateDbSchema(db, includeData) : '';
+    function openDownload() {
+        downloadOpen = true;
     }
 </script>
 
@@ -95,7 +103,19 @@
     <meta property="og:image" content="/thumbnail.png" />
     <meta property="og:url" content="https://simple-sqlite-editor.vercel.app" />
     <meta property="og:description" content="A very simple online SQL editor with a local database." />
+    <meta property="twitter:title" content="Sqlite Editor" />
+    <meta property="twitter:description" content="A very simple online SQL editor, with a local database." />
+    <meta property="twitter:image" content="/thumbnail.png" />
 </svelte:head>
+
+<svelte:document
+    on:keydown={(e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+            e.preventDefault();
+            downloadLink?.click();
+        }
+    }}
+/>
 
 <header>
     <h1><FeatherIcon /> SQLite editor</h1>
@@ -113,6 +133,9 @@
                 bind:value
                 bind:selection
                 debounce={300}
+                on:save={() => {
+                    downloadLink?.click();
+                }}
                 on:run={runQuery}
                 on:change={(event) => {
                     switch (event.detail.path) {
@@ -129,6 +152,9 @@
             <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? 'RUN' : 'RUN SELECTION'} {isMac() ? '⌘' : 'Ctrl'}⏎</button>
             <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>CLEAR</button>
             {executionTime}
+            <button style:--font-size="0.75rem" style:margin-left="auto" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={openDownload}
+                >DOWNDLOAD .sql</button
+            >
         </div>
         <div id="result">
             {#if error !== ''}
@@ -159,6 +185,23 @@
 <a href="https://codepassport.dev" target="_blank" class="badge">
     <BadgeIcon />
 </a>
+
+<Dialog bind:isOpen={downloadOpen} on:requestclose={() => (downloadOpen = false)}>
+    <div class="dialog-header">
+        <button style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={() => (downloadOpen = false)}>BACK</button>
+        <label for="includeData"
+            >Include data
+            <Toggle id="includeData" --bg="var(--color-area)" bind:checked={includeData} />
+        </label>
+        <a role="button" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql">DOWNLOAD FILE</a>
+    </div>
+    <pre style:width="40rem" style:max-width="100%">{dbSchema}</pre>
+    <small
+        >⚠️ Auto increment and foreign keys aren't fully supported, <a href="https://github.com/jeremt/sqlite-editor/issues" target="_blank"
+            >feel free to contribute</a
+        >.</small
+    >
+</Dialog>
 
 <style>
     .badge {
@@ -238,5 +281,23 @@
     #tables > button:not(.selected) {
         --fg: var(--color-fg);
         --bg: var(--color-area);
+    }
+    .dialog-header {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        & > label {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-right: auto;
+        }
+    }
+    small {
+        text-align: center;
+        color: var(--color-muted);
+        & > a {
+            color: var(--color-primary);
+        }
     }
 </style>

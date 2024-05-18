@@ -58,7 +58,7 @@
     let editor: monaco.editor.IStandaloneCodeEditor;
     let Monaco: typeof monaco;
 
-    const dispatch = createEventDispatcher<{change: FileData; run: void}>();
+    const dispatch = createEventDispatcher<{change: FileData; run: void; save: void}>();
 
     // @ts-ignore fuck you node
     let debounceTimer: NodeJS.Timeout;
@@ -122,7 +122,7 @@
         editor.onKeyDown((event) => {
             if (event.keyCode === 49 /** KeyCode.KeyS */ && (event.ctrlKey || event.metaKey)) {
                 event.preventDefault();
-                console.info("We don't do save, sorry 🤷");
+                dispatch('save');
             }
         });
 
