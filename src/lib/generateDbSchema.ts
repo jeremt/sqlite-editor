@@ -44,7 +44,17 @@ export function generateDbSchema(db: DB, includeData: boolean, tabSize = 4) {
                     let insertSchema = `--- Add some data to ${tableName}\n`;
                     const columns = Object.keys(rows[0]);
                     insertSchema += `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES\n`;
-                    insertSchema += rows.map((row) => `${' '.repeat(tabSize)}(${columns.map((col) => row[col]).join(', ')})`).join(',\n');
+                    insertSchema += rows
+                        .map(
+                            (row) =>
+                                `${' '.repeat(tabSize)}(${columns
+                                    .map((col) => {
+                                        const rowValue = row[col];
+                                        return typeof rowValue === 'string' ? `'${rowValue}'` : rowValue;
+                                    })
+                                    .join(', ')})`,
+                        )
+                        .join(',\n');
                     insertSchema += ';\n';
                     return insertSchema;
                 })

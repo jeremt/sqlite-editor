@@ -13,6 +13,7 @@
     import Toggle from '$lib/components/Toggle.svelte';
     import {generateDbSchema, getTableHeader} from '$lib/generateDbSchema.js';
     import {_} from 'svelte-i18n';
+    import {mdToHtml} from '$lib/markdown/mdToHtml.js';
 
     export let data;
 
@@ -37,7 +38,7 @@
     onMount(async () => {
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
         const sqlite3: SQLite3 = await initSqlite();
-        db = new sqlite3.oo1.DB(':localStorage:', 'ct');
+        db = new sqlite3.oo1.DB(':localStorage:', '');
         updateSchema();
         isMounted = true;
     });
@@ -89,7 +90,19 @@
     let downloadOpen = false;
     let dbSchema = '';
     let includeData = true;
-    $: dbSchema = db ? generateDbSchema(db, includeData) : '';
+    $: updateDbSchema(), includeData, db, downloadOpen;
+    async function updateDbSchema() {
+        if (!db) {
+            return;
+        }
+        const [content, err] = await mdToHtml('```sql\n' + generateDbSchema(db, includeData) + '```');
+        if (err) {
+            console.error(err);
+        }
+        if (content) {
+            dbSchema = content;
+        }
+    }
     function openDownload() {
         downloadOpen = true;
     }
@@ -197,7 +210,9 @@
             >{$_('downloadDialog.download_file')}</a
         >
     </div>
-    <pre style:width="40rem" style:max-width="100%">{dbSchema}</pre>
+    <div class="dialog-content">
+        {@html dbSchema}
+    </div>
     <small>{@html $_('downloadDialog.warning')}</small>
 </Dialog>
 
@@ -290,6 +305,15 @@
             align-items: center;
             margin-right: auto;
         }
+    }
+    .dialog-content {
+        width: 40rem;
+        max-width: 100%;
+        margin: 1rem 0;
+        overflow: auto;
+    }
+    .dialog-content > :global(pre) {
+        margin: 0;
     }
     small {
         width: 40rem;
