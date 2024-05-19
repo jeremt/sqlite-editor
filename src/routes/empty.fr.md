@@ -1,13 +1,13 @@
-No tables created yet. You can create one by copying the following SQL query into the editor (on the left) and clicking on **RUN**.
+Pas encore de tables crées. Tu peux en créer une en copiant le SQL ci-dessous dans l'éditeur (à gauche) et en cliquant sur **EXÉCUTER**.
 
 ```sql
--- Create a simple user table
+-- Crée une table "users"
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   firstname TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE
 );
--- Insert 4 famous in tech women into the table
+-- Insert 4 utilisatrices dans la table
 INSERT INTO users (firstname, email) VALUES
   ('Ada', 'ada@codepassport.dev'),
   ('Grace', 'grace@codepassport.dev'),

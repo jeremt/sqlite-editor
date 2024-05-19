@@ -1,0 +1,15 @@
+{
+    "run": "RUN",
+    "run_selection": "RUN SELECTION",
+    "clear": "CLEAR",
+    "download": "DOWNLOAD",
+    "result": {
+        "success": "Success. No rows returned",
+        "emptyState": "Use <strong>RUN {cmdOrCtrl}⏎</strong> to execute your SQL query."
+    },
+    "downloadDialog": {
+        "include_data": "Include data",
+        "download_file": "DOWNLOAD FILE",
+        "warning": "⚠️ Auto increment and foreign keys aren't fully supported, <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">feel free to contribute</a>."
+    }
+}

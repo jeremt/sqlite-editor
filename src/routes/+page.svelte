@@ -9,10 +9,10 @@
     import {colorScheme} from '$lib/color-scheme/store';
     import TableIcon from '$lib/icons/TableIcon.svelte';
     import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
-    import {isMac} from '$lib/isMac.js';
     import Dialog from '$lib/components/Dialog.svelte';
     import Toggle from '$lib/components/Toggle.svelte';
     import {generateDbSchema, getTableHeader} from '$lib/generateDbSchema.js';
+    import {_} from 'svelte-i18n';
 
     export let data;
 
@@ -149,11 +149,11 @@
             />
         </div>
         <div id="toolbar">
-            <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? 'RUN' : 'RUN SELECTION'} {isMac() ? '⌘' : 'Ctrl'}⏎</button>
-            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>CLEAR</button>
+            <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? $_('run') : $_('run_selection')} {data.isMac ? '⌘' : 'Ctrl'}⏎</button>
+            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>{$_('clear')}</button>
             {executionTime}
             <button style:--font-size="0.75rem" style:margin-left="auto" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={openDownload}
-                >DOWNDLOAD .sql</button
+                >{$_('download')} .sql</button
             >
         </div>
         <div id="result">
@@ -162,9 +162,9 @@
             {:else if result.length > 0}
                 <SQLTable data={result} />
             {:else if !isClear}
-                <div class="info">Success. No rows returned</div>
+                <div class="info">{$_('result.success')}</div>
             {:else}
-                <div class="info">Use <strong>RUN {isMac() ? '⌘' : 'Ctrl'}⏎</strong> to execute your SQL query.</div>
+                <div class="info">{@html $_('result.emptyState', {values: {cmdOrCtrl: data.isMac ? '⌘' : 'Ctrl'}})}</div>
             {/if}
         </div>
     </div>
@@ -188,19 +188,17 @@
 
 <Dialog bind:isOpen={downloadOpen} on:requestclose={() => (downloadOpen = false)}>
     <div class="dialog-header">
-        <button style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={() => (downloadOpen = false)}>BACK</button>
+        <button style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={() => (downloadOpen = false)}>ESC</button>
         <label for="includeData"
-            >Include data
+            >{$_('downloadDialog.include_data')}
             <Toggle id="includeData" --bg="var(--color-area)" bind:checked={includeData} />
         </label>
-        <a role="button" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql">DOWNLOAD FILE</a>
+        <a role="button" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql"
+            >{$_('downloadDialog.download_file')}</a
+        >
     </div>
     <pre style:width="40rem" style:max-width="100%">{dbSchema}</pre>
-    <small
-        >⚠️ Auto increment and foreign keys aren't fully supported, <a href="https://github.com/jeremt/sqlite-editor/issues" target="_blank"
-            >feel free to contribute</a
-        >.</small
-    >
+    <small>{@html $_('downloadDialog.warning')}</small>
 </Dialog>
 
 <style>
@@ -262,7 +260,7 @@
     .info {
         color: var(--color-muted);
     }
-    .info > strong {
+    .info > :global(strong) {
         color: var(--color-fg);
         font-size: 0.8rem;
         padding: 0 0.3rem;
@@ -294,6 +292,9 @@
         }
     }
     small {
+        width: 40rem;
+        max-width: 100%;
+        padding: 0 1rem;
         text-align: center;
         color: var(--color-muted);
         & > a {

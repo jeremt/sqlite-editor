@@ -1,0 +1,15 @@
+{
+    "run": "EXÉCUTER",
+    "run_selection": "EXÉCUTER LA SÉLECTION",
+    "clear": "EFFACER",
+    "download": "TÉLÉCHARGER",
+    "result": {
+        "success": "Success. No rows returned",
+        "emptyState": "Use <strong>RUN {cmdOrCtrl}⏎</strong> to execute your SQL query."
+    },
+    "downloadDialog": {
+        "include_data": "Inclure les données",
+        "download_file": "TÉLÉCHARGER LE FICHIER",
+        "warning": "⚠️ Auto increment et les foreign keys ne sont pas totalement supportées, tu peux contribuer <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">ici</a> pour améliorer l'éditeur."
+    }
+}
