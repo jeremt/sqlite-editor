@@ -4,8 +4,8 @@
     "clear": "EFFACER",
     "download": "TÉLÉCHARGER",
     "result": {
-        "success": "Success. No rows returned",
-        "emptyState": "Use <strong>RUN {cmdOrCtrl}⏎</strong> to execute your SQL query."
+        "success": "Succès. Aucune ligne retournée",
+        "emptyState": "Utilise le bouton <strong>EXÉCUTER {cmdOrCtrl}⏎</strong> pour appliquer ton code SQL."
     },
     "downloadDialog": {
         "include_data": "Inclure les données",
