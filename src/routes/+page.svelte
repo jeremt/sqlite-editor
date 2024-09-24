@@ -14,6 +14,7 @@
     import {generateDbSchema, getTableHeader} from '$lib/generateDbSchema.js';
     import {_} from 'svelte-i18n';
     import {mdToHtml} from '$lib/markdown/mdToHtml.js';
+    import {SplitPane} from '@rich_harris/svelte-split-pane';
 
     export let data;
 
@@ -136,63 +137,79 @@
     <a role="button" class="circle" aria-label="Project's github" href="https://github.com/jeremt/sqlite-editor" target="_blank"><GithubIcon /></a>
 </header>
 <main>
-    <div id="left">
-        <div id="editor">
-            <MonacoEditor
-                theme={$colorScheme}
-                fontSize={14}
-                files={[{path: 'default.sql', value: ``}]}
-                selectedFile="default.sql"
-                bind:value
-                bind:selection
-                debounce={300}
-                on:save={() => {
-                    downloadLink?.click();
-                }}
-                on:run={runQuery}
-                on:change={(event) => {
-                    switch (event.detail.path) {
-                        case 'default.sql':
-                            sql = event.detail.value;
-                            break;
-                        default:
-                            throw new Error(`File ${event.detail.path} not found.`);
-                    }
-                }}
-            />
+    <SplitPane type="horizontal" min="200px" max="-100px" pos="50%" priority="min" --color="var(--color-bg-1)" --thickness="1rem">
+        <div id="left" slot="a">
+            <SplitPane type="vertical">
+                <div id="editor" slot="a">
+                    <MonacoEditor
+                        theme={$colorScheme}
+                        fontSize={14}
+                        files={[{path: 'default.sql', value: ``}]}
+                        selectedFile="default.sql"
+                        bind:value
+                        bind:selection
+                        debounce={300}
+                        on:save={() => {
+                            downloadLink?.click();
+                        }}
+                        on:run={runQuery}
+                        on:change={(event) => {
+                            switch (event.detail.path) {
+                                case 'default.sql':
+                                    sql = event.detail.value;
+                                    break;
+                                default:
+                                    throw new Error(`File ${event.detail.path} not found.`);
+                            }
+                        }}
+                    />
+                </div>
+                <slot slot="b">
+                    <div id="console">
+                        <div id="toolbar">
+                            <button style:--font-size="0.75rem" on:click={runQuery}
+                                >{selection === '' ? $_('run') : $_('run_selection')} {data.isMac ? '⌘' : 'Ctrl'}⏎</button
+                            >
+                            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}
+                                >{$_('clear')}</button
+                            >
+                            {executionTime}
+                            <button
+                                style:--font-size="0.75rem"
+                                style:margin-left="auto"
+                                style:--fg="var(--color-fg)"
+                                style:--bg="var(--color-area)"
+                                on:click={openDownload}>{$_('download')} .sql</button
+                            >
+                        </div>
+                        <div id="result">
+                            {#if error !== ''}
+                                <div class="error">{error}</div>
+                            {:else if result.length > 0}
+                                <SQLTable data={result} />
+                            {:else if !isClear}
+                                <div class="info">{$_('result.success')}</div>
+                            {:else}
+                                <div class="info">{@html $_('result.emptyState', {values: {cmdOrCtrl: data.isMac ? '⌘' : 'Ctrl'}})}</div>
+                            {/if}
+                        </div>
+                    </div>
+                </slot>
+            </SplitPane>
         </div>
-        <div id="toolbar">
-            <button style:--font-size="0.75rem" on:click={runQuery}>{selection === '' ? $_('run') : $_('run_selection')} {data.isMac ? '⌘' : 'Ctrl'}⏎</button>
-            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}>{$_('clear')}</button>
-            {executionTime}
-            <button style:--font-size="0.75rem" style:margin-left="auto" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={openDownload}
-                >{$_('download')} .sql</button
-            >
-        </div>
-        <div id="result">
-            {#if error !== ''}
-                <div class="error">{error}</div>
-            {:else if result.length > 0}
-                <SQLTable data={result} />
-            {:else if !isClear}
-                <div class="info">{$_('result.success')}</div>
-            {:else}
-                <div class="info">{@html $_('result.emptyState', {values: {cmdOrCtrl: data.isMac ? '⌘' : 'Ctrl'}})}</div>
+        <div id="right" slot="b">
+            {#if tables.length}
+                <div id="tables">
+                    {#each tables as table}
+                        <button class:selected={selectedTableName === table} on:click={() => (selectedTableName = table)}><TableIcon /> {table}</button>
+                    {/each}
+                </div>
+                <SQLTable header={selectedTableHeader} data={selectedTable} />
+            {:else if isMounted}
+                <article class="prose">{@html data.content}</article>
             {/if}
         </div>
-    </div>
-    <div id="right">
-        {#if tables.length}
-            <div id="tables">
-                {#each tables as table}
-                    <button class:selected={selectedTableName === table} on:click={() => (selectedTableName = table)}><TableIcon /> {table}</button>
-                {/each}
-            </div>
-            <SQLTable header={selectedTableHeader} data={selectedTable} />
-        {:else if isMounted}
-            <article class="prose">{@html data.content}</article>
-        {/if}
-    </div>
+    </SplitPane>
 </main>
 
 <a href="https://codepassport.dev" target="_blank" class="badge">
@@ -243,17 +260,22 @@
     #left {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
         gap: 0.5rem;
         padding: 0 0 1rem 1rem;
     }
     #right {
-        width: 45%;
         padding: 1rem;
         overflow: auto;
     }
     #editor {
         flex-grow: 1;
+    }
+
+    #console {
+        display: flex;
+        flex-direction: column;
+        padding-top: 1rem;
+        gap: 0.5rem;
     }
 
     #toolbar {
@@ -264,7 +286,7 @@
         color: var(--color-dimmed);
     }
     #result {
-        height: 20rem;
+        flex-grow: 1;
         background-color: var(--color-area);
         padding: 1rem;
         overflow: auto;

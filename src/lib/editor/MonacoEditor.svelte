@@ -4,6 +4,7 @@
     import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
     import {shikiToMonaco} from '@shikijs/monaco';
     import {getHighlighter} from 'shiki';
+    import {resize} from '$lib/helpers/resize';
 
     /**
      * Represents a virtual file used by the editor.
@@ -171,19 +172,16 @@
             );
         }
     }
+
+    function onResize(width: number, height: number) {
+        if (!editor) {
+            return;
+        }
+        editor.layout({width, height});
+    }
 </script>
 
-<div bind:this={divEl} class="editor" />
-
-<svelte:window
-    on:resize={() => {
-        editor.layout({width: 0, height: 0}); // the layout below won't be triggered otherwise
-        window.requestAnimationFrame(() => {
-            const rect = divEl.getBoundingClientRect();
-            editor.layout({width: rect.width, height: rect.height});
-        });
-    }}
-/>
+<div bind:this={divEl} class="editor" use:resize={onResize} />
 
 <style>
     .editor {
