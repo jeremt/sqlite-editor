@@ -186,6 +186,6 @@
 <style>
     .editor {
         height: 100%;
-        background-color: var(--color-area);
+        background-color: var(--color-bg-1);
     }
 </style>

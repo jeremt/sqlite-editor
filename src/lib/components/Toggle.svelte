@@ -24,7 +24,7 @@
         transition: 0.3s all;
         border-radius: 1rem;
 
-        background-color: var(--bg, var(--color-bg));
+        background-color: var(--bg, var(--color-bg-2));
     }
     [role='switch']:checked {
         padding-inline: var(--toggle-width) 0;

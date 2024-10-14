@@ -167,18 +167,19 @@
                 <slot slot="b">
                     <div id="console">
                         <div id="toolbar">
-                            <button style:--font-size="0.75rem" on:click={runQuery}
+                            <button class="btn" style:--font-size="0.75rem" on:click={runQuery}
                                 >{selection === '' ? $_('run') : $_('run_selection')} {data.isMac ? '⌘' : 'Ctrl'}⏎</button
                             >
-                            <button style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={clearResult}
+                            <button class="btn" style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={clearResult}
                                 >{$_('clear')}</button
                             >
                             {executionTime}
                             <button
+                                class="btn"
                                 style:--font-size="0.75rem"
                                 style:margin-left="auto"
                                 style:--fg="var(--color-fg)"
-                                style:--bg="var(--color-area)"
+                                style:--bg="var(--color-bg-1)"
                                 on:click={openDownload}>{$_('download')} .sql</button
                             >
                         </div>
@@ -201,7 +202,9 @@
             {#if tables.length}
                 <div id="tables">
                     {#each tables as table}
-                        <button class:selected={selectedTableName === table} on:click={() => (selectedTableName = table)}><TableIcon /> {table}</button>
+                        <button class="btn" class:selected={selectedTableName === table} on:click={() => (selectedTableName = table)}
+                            ><TableIcon /> {table}</button
+                        >
                     {/each}
                 </div>
                 <SQLTable header={selectedTableHeader} data={selectedTable} />
@@ -218,12 +221,12 @@
 
 <Dialog bind:isOpen={downloadOpen} on:requestclose={() => (downloadOpen = false)}>
     <div class="dialog-header">
-        <button style:--fg="var(--color-fg)" style:--bg="var(--color-area)" on:click={() => (downloadOpen = false)}>ESC</button>
+        <button class="btn" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={() => (downloadOpen = false)}>ESC</button>
         <label for="includeData"
             >{$_('downloadDialog.include_data')}
-            <Toggle id="includeData" --bg="var(--color-area)" bind:checked={includeData} />
+            <Toggle id="includeData" bind:checked={includeData} />
         </label>
-        <a role="button" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql"
+        <a role="button" class="btn" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql"
             >{$_('downloadDialog.download_file')}</a
         >
     </div>
@@ -287,7 +290,7 @@
     }
     #result {
         flex-grow: 1;
-        background-color: var(--color-area);
+        background-color: var(--color-bg-1);
         padding: 1rem;
         overflow: auto;
     }
@@ -295,7 +298,7 @@
         color: var(--color-error);
     }
     .info {
-        color: var(--color-muted);
+        color: var(--color-fg-1);
     }
     .info > :global(strong) {
         color: var(--color-fg);
@@ -315,7 +318,7 @@
 
     #tables > button:not(.selected) {
         --fg: var(--color-fg);
-        --bg: var(--color-area);
+        --bg: var(--color-bg-1);
     }
     .dialog-header {
         display: flex;
@@ -342,7 +345,7 @@
         max-width: 100%;
         padding: 0 1rem;
         text-align: center;
-        color: var(--color-muted);
+        color: var(--color-fg-1);
         & > a {
             color: var(--color-primary);
         }

@@ -19,4 +19,6 @@ export interface TableInfoColumn {
     notnull: 0 | 1;
     pk: 1 | 0;
     type: string;
+    fk_table?: string;
+    fk_column?: string;
 }

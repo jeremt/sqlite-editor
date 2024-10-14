@@ -6,8 +6,8 @@
     box-sizing: border-box;
 }
 
-a[role='button'],
-button {
+a[role='button'].btn,
+button.btn {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -12,10 +12,10 @@
 
 html[color-scheme='dark'] {
     --color-fg: #dddddd; /* The main neutral color used for important texts and icons */
-    --color-muted: #aaaaaa; /* Similar to fg but for slightly less important texts */
+    --color-fg-1: #aaaaaa; /* Similar to fg but for slightly less important texts */
     --color-bg: #161616; /* The main background color of the website */
-    --color-area: #1e1e1e; /* Used for areas like cards to separate from the background */
-    --color-border: #303030; /* A little more contrasted than area, used for smaller things like lines */
+    --color-bg-1: #1e1e1e; /* Used for areas like cards to separate from the background */
+    --color-bg-2: #303030; /* A little more contrasted than area, used for smaller things like lines */
     --color-primary: #5292d2; /* The main color, usually your brand color it can be used for stuffs like links and buttons */
     --color-link-visited: #c690e8; /* Used for already visisted link, usually some kind of purple */
     --color-error: #e15757; /* Used for errors, usually some kind of red */
@@ -32,10 +32,10 @@ html[color-scheme='dark'] {
 
 html[color-scheme='light'] {
     --color-fg: #292e3a; /* The main neutral color used for important texts and icons */
-    --color-muted: #646484; /* Similar to fg but for slightly less important texts */
+    --color-fg-1: #646484; /* Similar to fg but for slightly less important texts */
     --color-bg: #e0e5f2; /* The main background color of the website */
-    --color-area: #ffffff; /* Used for areas like cards to separate from the background */
-    --color-border: #c4c4df; /* A little more contrasted than area, used for smaller things like lines */
+    --color-bg-1: #ffffff; /* Used for areas like cards to separate from the background */
+    --color-bg-2: #c4c4df; /* A little more contrasted than area, used for smaller things like lines */
     --color-primary: #1c8ade; /* The main color, usually your brand color it can be used for stuffs like links and buttons */
     --color-link-visited: #9d53e2; /* Used for already visisted link, usually some kind of purple */
     --color-error: #d13434; /* Used for errors, usually some kind of red */
@@ -65,9 +65,9 @@ body,
 
 /* Button */
 
-a[role='button'],
-button {
-    color: var(--fg, var(--color-area));
+a[role='button'].btn,
+button.btn {
+    color: var(--fg, var(--color-bg-1));
     background: var(--bg, var(--color-fg));
     border: none;
     transition: var(--transition, all 0.3s);
@@ -102,15 +102,23 @@ button {
     }
 }
 
-a[role='button'] > svg,
-button > svg,
+a[role='button'].btn > svg,
+button.btn > svg,
 a[role='button'].circle > svg,
 button.circle > svg {
-    color: var(--fg, var(--color-area));
+    color: var(--fg, var(--color-bg-1));
 }
 
 a[role='button'].circle,
 button.circle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg, var(--color-bg-1));
+    background: var(--bg, var(--color-fg));
+    border: none;
+    transition: var(--transition, all 0.3s);
     height: var(--size, 2.5rem);
     width: var(--size, 2.5rem);
     padding: 0.3rem;
@@ -137,13 +145,13 @@ select {
 
 th,
 td {
-    border: 2px solid var(--color-border);
+    border: 2px solid var(--color-bg-2);
 }
 
 /* Prose */
 
 .prose {
-    color: var(--color-muted);
+    color: var(--color-fg-1);
     font-family: var(--font-content);
     font-size: 0.9rem;
 }
@@ -233,7 +241,7 @@ td {
 
 html[color-scheme='dark'] code,
 html[color-scheme='dark'] pre {
-    background-color: var(--color-area) !important;
+    background-color: var(--color-bg-1) !important;
 }
 
 html[color-scheme='dark'] code span {
@@ -246,7 +254,7 @@ code {
     font-size: 0.8em;
     white-space: nowrap;
     border-radius: 0.5em;
-    background-color: var(--color-area);
+    background-color: var(--color-bg-1);
 }
 
 pre {
@@ -256,7 +264,7 @@ pre {
     font-size: 1rem;
     line-height: 1.5;
     border-radius: 0.5em;
-    background-color: var(--color-area);
+    background-color: var(--color-bg-1);
 }
 
 pre code {
