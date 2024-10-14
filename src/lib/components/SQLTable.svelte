@@ -56,6 +56,7 @@
         padding: 0;
         cursor: pointer;
         border: none;
+        color: var(--color-fg);
     }
 
     th {
