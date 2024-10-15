@@ -173,7 +173,7 @@
                             <button class="btn" style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={clearResult}
                                 >{$_('clear')}</button
                             >
-                            {executionTime}
+                            <span style:color="var(--color-fg-1)">{executionTime}</span>
                             <button
                                 class="btn"
                                 style:--font-size="0.75rem"
@@ -207,7 +207,7 @@
                         >
                     {/each}
                 </div>
-                <SQLTable header={selectedTableHeader} data={selectedTable} />
+                <SQLTable header={selectedTableHeader} data={selectedTable} bind:tableName={selectedTableName} />
             {:else if isMounted}
                 <article class="prose">{@html data.content}</article>
             {/if}

@@ -5,9 +5,12 @@
 
     export let header: TableInfoColumn[] | undefined = undefined;
     export let data: Record<string, any>[];
+    export let tableName = '';
 
     function selectForeignTable(table?: string, column?: string) {
-        console.log(table, column);
+        if (table) {
+            tableName = table;
+        }
     }
 </script>
 
