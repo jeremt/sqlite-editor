@@ -5,6 +5,7 @@
     import {shikiToMonaco} from '@shikijs/monaco';
     import {getHighlighter} from 'shiki';
     import {resize} from '$lib/helpers/resize';
+    import {addSqliteAutocomplete, type Schema} from './addSqliteAutocomplete';
 
     /**
      * Represents a virtual file used by the editor.
@@ -49,6 +50,11 @@
      * The currently selected text.
      */
     export let selection = '';
+
+    /**
+     * The table names and columns, used for autocomplete.
+     */
+    export let schema: Schema;
 
     /**
      * Whether emmet should be enabled.
@@ -142,11 +148,13 @@
         };
     });
 
-    onDestroy(() => {
-        Monaco?.editor.getModels().forEach((model) => {
-            model.dispose();
-        });
-    });
+    let sqlAutocomplete: monaco.IDisposable;
+    $: if (Monaco) {
+        if (sqlAutocomplete) {
+            sqlAutocomplete.dispose();
+        }
+        sqlAutocomplete = addSqliteAutocomplete(Monaco, schema);
+    }
 
     $: Monaco?.editor.setTheme(`${theme}-plus`);
 
@@ -172,6 +180,15 @@
             );
         }
     }
+
+    onDestroy(() => {
+        if (sqlAutocomplete) {
+            sqlAutocomplete.dispose();
+        }
+        Monaco?.editor.getModels().forEach((model) => {
+            model.dispose();
+        });
+    });
 
     function onResize(width: number, height: number) {
         if (!editor) {

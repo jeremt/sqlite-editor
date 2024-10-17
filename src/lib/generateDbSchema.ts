@@ -21,7 +21,7 @@ ORDER BY
     );
 }
 
-export function generateDbSchema(db: DB, includeData: boolean, tabSize = 4) {
+export function generateDbDump(db: DB, includeData: boolean, tabSize = 4) {
     const tableNames = db
         .exec(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;`, {rowMode: 'object'})
         .map((row: {name: string}) => row.name)

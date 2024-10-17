@@ -11,10 +11,11 @@
     import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
     import Dialog from '$lib/components/Dialog.svelte';
     import Toggle from '$lib/components/Toggle.svelte';
-    import {generateDbSchema, getTableHeader} from '$lib/generateDbSchema.js';
+    import {generateDbDump, getTableHeader} from '$lib/generateDbSchema';
     import {_} from 'svelte-i18n';
-    import {mdToHtml} from '$lib/markdown/mdToHtml.js';
+    import {mdToHtml} from '$lib/markdown/mdToHtml';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
+    import type {Schema} from '$lib/editor/addSqliteAutocomplete';
 
     export let data;
 
@@ -23,6 +24,7 @@
 
     let db: DB | undefined;
 
+    let schema: Schema;
     let tables: string[] = [];
     let selectedTableName: string | undefined = undefined;
     let selectedTableHeader: TableInfoColumn[] | undefined = undefined;
@@ -72,10 +74,26 @@
             return;
         }
         try {
-            tables = db
-                .exec(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;`, {rowMode: 'object'})
-                .map((row: {name: string}) => row.name)
-                .filter((name: string) => name !== 'sqlite_sequence');
+            schema = db
+                .exec(
+                    `SELECT 
+                        m.name AS tableName, 
+                        p.name AS columnName
+                    FROM 
+                        sqlite_master m
+                    JOIN 
+                        pragma_table_info(m.name) p
+                    WHERE 
+                        m.type = 'table' AND m.name != 'sqlite_sequence'
+                    ORDER BY 
+                        m.name, 
+                        p.cid;`,
+                    {rowMode: 'object'},
+                )
+                .reduce((result: Schema, {tableName, columnName}: {tableName: string; columnName: string}) => {
+                    return {...result, [tableName]: result[tableName] ? [...result[tableName], columnName] : [columnName]};
+                }, {} as Schema);
+            tables = Object.keys(schema);
             selectedTableName = tableName ?? tables[0];
             if (selectedTableName) {
                 const rows = db.exec(`SELECT * from "${selectedTableName}"`, {rowMode: 'object'});
@@ -89,19 +107,19 @@
 
     let downloadLink: HTMLAnchorElement | null;
     let downloadOpen = false;
-    let dbSchema = '';
+    let dbDump = '';
     let includeData = true;
-    $: updateDbSchema(), includeData, db, downloadOpen;
-    async function updateDbSchema() {
+    $: updateDbDump(), includeData, db, downloadOpen;
+    async function updateDbDump() {
         if (!db) {
             return;
         }
-        const [content, err] = await mdToHtml('```sql\n' + generateDbSchema(db, includeData) + '```');
+        const [content, err] = await mdToHtml('```sql\n' + generateDbDump(db, includeData) + '```');
         if (err) {
             console.error(err);
         }
         if (content) {
-            dbSchema = content;
+            dbDump = content;
         }
     }
     function openDownload() {
@@ -146,6 +164,7 @@
                         fontSize={14}
                         files={[{path: 'default.sql', value: ``}]}
                         selectedFile="default.sql"
+                        {schema}
                         bind:value
                         bind:selection
                         debounce={300}
@@ -226,12 +245,12 @@
             >{$_('downloadDialog.include_data')}
             <Toggle id="includeData" bind:checked={includeData} />
         </label>
-        <a role="button" class="btn" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbSchema)}" download="schema.sql"
+        <a role="button" class="btn" bind:this={downloadLink} href="data:application/octet-stream,{encodeURIComponent(dbDump)}" download="schema.sql"
             >{$_('downloadDialog.download_file')}</a
         >
     </div>
     <div class="dialog-content">
-        {@html dbSchema}
+        {@html dbDump}
     </div>
     <small>{@html $_('downloadDialog.warning')}</small>
 </Dialog>
