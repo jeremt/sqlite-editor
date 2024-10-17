@@ -92,28 +92,16 @@ export function addSqliteAutocomplete(Monaco: typeof monaco, schema: Schema) {
                     detail: 'Table',
                     range: wordRange,
                 });
-            }
-
-            const textUntilPosition = model.getValueInRange({
-                startLineNumber: 1,
-                startColumn: 1,
-                endLineNumber: position.lineNumber,
-                endColumn: position.column,
-            });
-
-            const lastWord = textUntilPosition.split(/\s+/).pop();
-            if (lastWord && schema[lastWord]) {
-                schema[lastWord].forEach((column) => {
+                for (const column of schema[table]) {
                     suggestions.push({
                         label: column,
                         kind: Monaco.languages.CompletionItemKind.Field,
                         insertText: column,
-                        detail: `Column of ${lastWord}`,
+                        detail: `Column of ${table}`,
                         range: wordRange,
                     });
-                });
+                }
             }
-
             return {suggestions};
         },
     });
