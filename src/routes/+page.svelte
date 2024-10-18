@@ -217,7 +217,11 @@
                             {:else if !isClear}
                                 <div class="info">{$_('result.success')}</div>
                             {:else}
-                                <div class="info">{@html $_('result.emptyState', {values: {cmdOrCtrl: data.isMac ? '⌘' : 'Ctrl'}})}</div>
+                                <div class="info">
+                                    {@html $_('result.emptyState', {
+                                        values: {cmdOrCtrl: data.isMac || navigator.userAgent.indexOf('Mac OS X') !== -1 ? '⌘' : 'Ctrl'},
+                                    })}
+                                </div>
                             {/if}
                         </div>
                     </div>
