@@ -10,6 +10,28 @@
     "downloadDialog": {
         "include_data": "Inclure les données",
         "download_file": "TÉLÉCHARGER LE FICHIER",
-        "warning": "⚠️ Auto increment et les foreign keys ne sont pas totalement supportées, tu peux contribuer <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">ici</a> pour améliorer l'éditeur."
+        "warning": "⚠️ Auto increment (et peut être d'autres fonctionnalités) ne sont pas totalement supportées, tu peux contribuer <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">ici</a> pour améliorer l'éditeur."
+    },
+    "snippets": {
+        "definitions": {
+            "title": "Définitions",
+            "description": "Crée une table simple definitions qui contient des mots et leur définition."
+        },
+        "miniBlog": {
+            "title": "Mini blog",
+            "description": "Crée des tables pour gérer des articles de blogs et des commentaires liés aux articles."
+        },
+        "miniBlogSeed": {
+            "title": "Mini blog (données)",
+            "description": "Ajoute 10 articles and 10 commentaires. Les tables articles et comments être crées avec Mini blog pour que ça fonctionne correctement."
+        },
+        "listTables": {
+            "title": "Liste des tables",
+            "description": "Liste toutes les tables dans la base de données."
+        },
+        "miniShop": {
+            "title": "Mini boutique",
+            "description": "Crée les tables products et customers avec une table de jointure customers_products pour gérer les produits achetés."
+        }
     }
 }

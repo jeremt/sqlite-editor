@@ -10,6 +10,28 @@
     "downloadDialog": {
         "include_data": "Include data",
         "download_file": "DOWNLOAD FILE",
-        "warning": "⚠️ Auto increment and foreign keys aren't fully supported, <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">feel free to contribute</a>."
+        "warning": "⚠️ Auto increment is not yet supported (and maybe some other stuff), but <a href=\"https://github.com/jeremt/sqlite-editor/issues\" target=\"_blank\">feel free to contribute</a>."
+    },
+    "snippets": {
+        "definitions": {
+            "title": "Definitions",
+            "description": "Create a simple definitions table with words and their definition."
+        },
+        "miniBlog": {
+            "title": "Mini blog",
+            "description": "Create tables to handle blog articles and their related comments."
+        },
+        "miniBlogSeed": {
+            "title": "Mini blog (seed)",
+            "description": "Add 10 articles and 10 related comments. Tables articles and comments must be created with Mini blog snippet to work properly."
+        },
+        "listTables": {
+            "title": "List tables",
+            "description": "List all tables in your database."
+        },
+        "miniShop": {
+            "title": "Mini shop",
+            "description": "Create tables products and customers with a customers_products joining table to track bought products."
+        }
     }
 }

@@ -24,6 +24,7 @@
                         {#if column.fk_column && column.fk_table}<button
                                 class="invisible"
                                 title="FOREIGN KEY {column.fk_table}.{column.fk_column}"
+                                style:padding-right="0.5rem"
                                 on:click={() => selectForeignTable(column.fk_table, column.fk_column)}><LinkIcon /></button
                             >{/if}
                         <span class="name">{column.name}</span>

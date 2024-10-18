@@ -4,6 +4,7 @@ import empty from './empty.md?raw';
 import emptyFR from './empty.fr.md?raw';
 import {get} from 'svelte/store';
 import {locale} from 'svelte-i18n';
+import {snippets} from './snippets';
 
 export const prerender = true;
 
@@ -13,9 +14,9 @@ export async function load({request}) {
     if (err) {
         throw error(500, err.message);
     }
-    console.log('USER_AGENT = ', request.headers.get('user-agent'));
     return {
         isMac: request.headers.get('user-agent')?.includes('Mac OS') ?? false,
         content,
+        snippets,
     };
 }
