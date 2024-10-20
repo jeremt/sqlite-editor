@@ -270,7 +270,7 @@
     <div class="dialog-header">
         <button class="btn" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={() => (snippetsOpen = false)}>ESC</button>
     </div>
-    <div class="dialog-content grid">
+    <div class="dialog-content grid" style:--col="12rem" style:width="45rem">
         {#each data.snippets as snippet}
             <button class="snippet-card" on:click={() => applySnippet(snippet.sql)}>
                 <h2>{$_(`snippets.${snippet.key}.title`)}</h2>
@@ -278,6 +278,7 @@
             </button>
         {/each}
     </div>
+    <div class="title" style:color="var(--color-fg-1)" style:text-align="center">Clique sur un snippet pour l'insérer dans l'éditeur</div>
 </Dialog>
 
 <style>

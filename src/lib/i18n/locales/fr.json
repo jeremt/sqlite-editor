@@ -17,13 +17,21 @@
             "title": "Définitions",
             "description": "Crée une table simple definitions qui contient des mots et leur définition."
         },
+        "definitionsSeed": {
+            "title": "Définitions (données)",
+            "description": "Ajoute 185 définitions, plus ou moins lié au domaine de la tech, générées par l'IA."
+        },
         "miniBlog": {
             "title": "Mini blog",
-            "description": "Crée des tables pour gérer des articles de blogs et des commentaires liés aux articles."
+            "description": "Crée des tables pour gérer des articles de blogs et leurs commentaires."
         },
         "miniBlogSeed": {
             "title": "Mini blog (données)",
-            "description": "Ajoute 10 articles and 10 commentaires. Les tables articles et comments être crées avec Mini blog pour que ça fonctionne correctement."
+            "description": "Ajoute 10 articles et commentaires dans les tables articles et comments."
+        },
+        "miniBlogSelect": {
+            "title": "Mini blog (sélection)",
+            "description": "Retourne tous les articles avec une colonne title, content et comments qui contient les commentaires de l'article en JSON."
         },
         "listTables": {
             "title": "Liste des tables",
