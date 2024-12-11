@@ -16,6 +16,7 @@
     import {mdToHtml} from '$lib/markdown/mdToHtml';
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import type {Schema} from '$lib/editor/addSqliteAutocomplete';
+    import {browser} from '$app/environment';
 
     export let data;
 
@@ -219,7 +220,7 @@
                             {:else}
                                 <div class="info">
                                     {@html $_('result.emptyState', {
-                                        values: {cmdOrCtrl: data.isMac || navigator.userAgent.indexOf('Mac OS X') !== -1 ? '⌘' : 'Ctrl'},
+                                        values: {cmdOrCtrl: data.isMac || (browser && navigator.userAgent.indexOf('Mac OS X') !== -1) ? '⌘' : 'Ctrl'},
                                     })}
                                 </div>
                             {/if}
