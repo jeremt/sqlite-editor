@@ -214,8 +214,7 @@ CREATE TABLE comments (
     updated_at DATETIME,
     author TEXT NOT NULL,
     message TEXT NOT NULL,
-    article_id INTEGER,
-    FOREIGN KEY (article_id) REFERENCES articles(id)
+    article_id INTEGER REFERENCES articles(id)
 );`,
     },
     {
@@ -287,10 +286,8 @@ CREATE TABLE customers (
     address TEXT NOT NULL
 );
 CREATE TABLE customers_products (
-    customer_id INTEGER,
-    product_id INTEGER,
-    FOREIGN KEY (customer_id) REFERENCES customers(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    customer_id INTEGER REFERENCES customers(id),
+    product_id INTEGER REFERENCES products(id)
 );`,
     },
     {
