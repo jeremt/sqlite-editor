@@ -252,8 +252,8 @@ UPDATE comments SET updated_at = DATETIME('now', '-' || ABS(RANDOM() % 15) || ' 
     {
         key: 'miniBlogSelect',
         sql: `SELECT 
-    title,
-    content,
+    articles.title,
+    articles.content,
     json_group_array(
             json_object(
                 'author', comments.author,
@@ -285,13 +285,60 @@ CREATE TABLE customers (
     email TEXT NOT NULL UNIQUE,
     address TEXT NOT NULL
 );
-CREATE TABLE customers_products (
+CREATE TABLE commands (
     customer_id INTEGER REFERENCES customers(id),
     product_id INTEGER REFERENCES products(id)
 );`,
     },
     {
+        key: 'miniShopSeed',
+        sql: `-- Insert some sample products
+INSERT INTO products (title, description, image_url, price) VALUES 
+('Wireless Noise-Canceling Headphones', 'High-quality over-ear headphones with advanced noise cancellation technology', 'https://example.com/headphones.jpg', 249.99),
+('Smart Fitness Tracker', 'Waterproof fitness watch with heart rate monitoring and GPS tracking', 'https://example.com/fitness-tracker.jpg', 129.50),
+('Portable Bluetooth Speaker', 'Compact wireless speaker with 12-hour battery life and waterproof design', 'https://example.com/speaker.jpg', 79.99),
+('Ergonomic Office Chair', 'Adjustable office chair with lumbar support and breathable mesh back', 'https://example.com/office-chair.jpg', 299.00),
+('4K Ultra HD Smart TV', '55-inch LED smart TV with HDR and built-in streaming apps', 'https://example.com/tv.jpg', 549.99);
+
+-- Insert some sample customers
+INSERT INTO customers (email, address) VALUES 
+('john.smith@example.com', '123 Main St, Anytown, USA 12345'),
+('emily.jones@gmail.com', '456 Oak Avenue, Springfield, IL 62701'),
+('michael.wong@hotmail.com', '789 Pine Road, Portland, OR 97201'),
+('sarah.miller@yahoo.com', '321 Maple Drive, Boston, MA 02108'),
+('david.garcia@outlook.com', '654 Elm Street, San Diego, CA 92101');
+
+-- Insert some sample customer-product relationships
+INSERT INTO commands (customer_id, product_id) VALUES 
+(1, 1), -- John bought Wireless Headphones
+(1, 3), -- John also bought Portable Speaker
+(2, 2), -- Emily bought Fitness Tracker
+(3, 4), -- Michael bought Office Chair
+(4, 5), -- Sarah bought 4K Smart TV
+(5, 1), -- David bought Wireless Headphones
+(5, 2), -- David also bought Fitness Tracker
+(5, 3); -- David also bought Portable Speaker`,
+    },
+    {
+        key: 'miniShopSelect',
+        sql: `-- Selectionne les commandes de david
+SELECT
+    products.title AS product_title,
+    customers.email AS customer_email
+    FROM products
+    JOIN commands ON commands.product_id = products.id
+    JOIN customers ON commands.customer_id = customers.id
+    WHERE customers.email = 'david.garcia@outlook.com';
+
+-- Calcul le prix total dépensé par tout⸱e⸱s les client⸱e⸱s
+SELECT
+    SUM(products.price)
+    FROM products
+    JOIN commands ON commands.product_id = products.id
+    JOIN customers ON commands.customer_id = customers.id;`,
+    },
+    {
         key: 'listTables',
-        sql: `select tbl_name from sqlite_master where type = 'table';`,
+        sql: `SELECT tbl_name FROM sqlite_master WHERE type = 'table';`,
     },
 ];
