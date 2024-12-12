@@ -64,6 +64,7 @@ const sqliteKeywords = [
     'WITH',
     'EXPLAIN',
     'RAISE',
+    'PRAGMA',
 ];
 
 const sqliteFunctions = [
@@ -161,13 +162,15 @@ const sqliteFunctions = [
             'sqlite_compileoption_get(N)',
             'load_extension(X)',
             'zeroblob(N)',
+            'index_list(T)',
+            'table_info(T)',
         ],
     },
 ];
 
 export type Schema = Record<string, string[]>;
 
-export function addSqliteAutocomplete(Monaco: typeof monaco, schema: Schema) {
+export const addSqliteAutocomplete = (Monaco: typeof monaco, schema: Schema) => {
     return Monaco.languages.registerCompletionItemProvider('sql', {
         provideCompletionItems: (
             model: monaco.editor.ITextModel,
@@ -220,4 +223,4 @@ export function addSqliteAutocomplete(Monaco: typeof monaco, schema: Schema) {
             return {suggestions};
         },
     });
-}
+};

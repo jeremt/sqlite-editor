@@ -21,4 +21,5 @@ export interface TableInfoColumn {
     type: string;
     fk_table?: string;
     fk_column?: string;
+    unique: boolean;
 }
