@@ -39,15 +39,15 @@
         },
         "miniShop": {
             "title": "Mini boutique",
-            "description": "Crée les tables products et customers avec une table de jointure customers_products pour gérer les produits achetés."
+            "description": "Crée les tables products et customers avec une table de jointure commands pour gérer les produits achetés."
         },
         "miniShopSeed": {
-            "title": "Mini shop (données)",
-            "description": "Ajoute des produits, clients et commandes pour le snippet Mini shop."
+            "title": "Mini boutique (données)",
+            "description": "Ajoute des produits, clients et commandes pour le snippet Mini boutique."
         },
         "miniShopSelect": {
-            "title": "Mini shop (séléction)",
-            "description": "Ajoute des exemples de select pour le snippet Mini shop."
+            "title": "Mini boutique (séléction)",
+            "description": "Ajoute des exemples de select pour le snippet Mini boutique."
         }
     }
 }

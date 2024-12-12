@@ -20,7 +20,7 @@
 
     export let data;
 
-    let value: string;
+    let value = '';
     let sql: string;
 
     let db: DB | undefined;
@@ -95,7 +95,7 @@
                     return {...result, [tableName]: result[tableName] ? [...result[tableName], columnName] : [columnName]};
                 }, {} as Schema);
             tables = Object.keys(schema);
-            selectedTableName = tableName ?? tables[0];
+            selectedTableName = tableName && tables.includes(tableName) ? tableName ?? tables[0] : tables[0];
             if (selectedTableName) {
                 const rows = db.exec(`SELECT * from "${selectedTableName}"`, {rowMode: 'object'});
                 selectedTable = rows;
@@ -129,7 +129,7 @@
 
     let snippetsOpen = false;
     function applySnippet(sql: string) {
-        value = sql;
+        value += sql;
         snippetsOpen = false;
     }
 </script>

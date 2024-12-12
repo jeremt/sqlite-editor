@@ -39,11 +39,11 @@
         },
         "miniShop": {
             "title": "Mini shop",
-            "description": "Create tables products and customers with a customers_products joining table to track bought products."
+            "description": "Create tables products and customers with a commands joining table to track bought products."
         },
         "miniShopSeed": {
             "title": "Mini shop (seed)",
-            "description": "Add some products and customers to the miniShop tables."
+            "description": "Add some products, customers and commands to the miniShop tables."
         },
         "miniShopSelect": {
             "title": "Mini shop (seed)",
