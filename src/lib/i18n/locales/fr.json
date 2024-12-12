@@ -14,39 +14,39 @@
     },
     "snippets": {
         "definitions": {
-            "title": "Définitions",
+            "title": "📖 Définitions",
             "description": "Crée une table simple definitions qui contient des mots et leur définition."
         },
         "definitionsSeed": {
-            "title": "Définitions (données)",
+            "title": "📖 Définitions (données)",
             "description": "Ajoute 185 définitions, plus ou moins lié au domaine de la tech, générées par l'IA."
         },
         "miniBlog": {
-            "title": "Mini blog",
+            "title": "✍️ Mini blog",
             "description": "Crée des tables pour gérer des articles de blogs et leurs commentaires."
         },
         "miniBlogSeed": {
-            "title": "Mini blog (données)",
+            "title": "✍️ Mini blog (données)",
             "description": "Ajoute 10 articles et commentaires dans les tables articles et comments."
         },
         "miniBlogSelect": {
-            "title": "Mini blog (sélection)",
+            "title": "✍️ Mini blog (sélection)",
             "description": "Retourne tous les articles avec une colonne title, content et comments qui contient les commentaires de l'article en JSON."
         },
         "listTables": {
-            "title": "Liste des tables",
+            "title": "⚙️ Liste des tables",
             "description": "Liste toutes les tables dans la base de données."
         },
         "miniShop": {
-            "title": "Mini boutique",
+            "title": "🛍️ Mini boutique",
             "description": "Crée les tables products et customers avec une table de jointure commands pour gérer les produits achetés."
         },
         "miniShopSeed": {
-            "title": "Mini boutique (données)",
+            "title": "🛍️ Mini boutique (données)",
             "description": "Ajoute des produits, clients et commandes pour le snippet Mini boutique."
         },
         "miniShopSelect": {
-            "title": "Mini boutique (séléction)",
+            "title": "🛍️ Mini boutique (séléction)",
             "description": "Ajoute des exemples de select pour le snippet Mini boutique."
         }
     }
