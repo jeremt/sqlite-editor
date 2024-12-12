@@ -195,7 +195,8 @@
                     <div id="console">
                         <div id="toolbar">
                             <button class="btn" style:--font-size="0.75rem" on:click={runQuery}
-                                >{selection === '' ? $_('run') : $_('run_selection')} {data.isMac ? '⌘' : 'Ctrl'}⏎</button
+                                >{selection === '' ? $_('run') : $_('run_selection')}
+                                {browser && navigator.userAgent.includes('Mac OS') ? '⌘' : 'Ctrl'}⏎</button
                             >
                             <button class="btn" style:--font-size="0.75rem" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={clearResult}
                                 >{$_('clear')}</button
@@ -220,7 +221,7 @@
                             {:else}
                                 <div class="info">
                                     {@html $_('result.emptyState', {
-                                        values: {cmdOrCtrl: data.isMac || (browser && navigator.userAgent.indexOf('Mac OS X') !== -1) ? '⌘' : 'Ctrl'},
+                                        values: {cmdOrCtrl: browser && navigator.userAgent.includes('Mac OS') ? '⌘' : 'Ctrl'},
                                     })}
                                 </div>
                             {/if}

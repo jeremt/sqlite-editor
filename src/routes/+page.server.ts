@@ -8,14 +8,13 @@ import {snippets} from './snippets';
 
 export const prerender = true;
 
-export async function load({request}) {
+export async function load() {
     const localeEmpty = get(locale) === 'fr-FR' ? emptyFR : empty;
     const [content, err] = await mdToHtml(localeEmpty);
     if (err) {
         throw error(500, err.message);
     }
     return {
-        isMac: request.headers.get('user-agent')?.includes('Mac OS') ?? false,
         content,
         snippets,
     };
