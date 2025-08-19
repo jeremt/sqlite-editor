@@ -55,10 +55,10 @@
             result = db?.exec(selection !== '' ? selection : sql, {rowMode: 'object'});
             const time = performance.now() - start;
             executionTime = `executed in ${time.toFixed(1)}ms`;
-            updateSchema(selectedTableName);
         } catch (err) {
             error = (err as Error).message;
         } finally {
+            updateSchema(selectedTableName);
             isClear = false;
         }
     }

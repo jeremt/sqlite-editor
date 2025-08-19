@@ -198,7 +198,7 @@
     }
 </script>
 
-<div bind:this={divEl} class="editor" use:resize={onResize} />
+<div bind:this={divEl} class="editor" use:resize={onResize}></div>
 
 <style>
     .editor {
