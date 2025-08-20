@@ -4,6 +4,8 @@ No tables created yet. You can create one by copying the following SQL query int
 -- Create a simple user table
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at DATETIME,
   firstname TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE
 );
