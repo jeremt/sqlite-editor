@@ -65,6 +65,7 @@ const sqliteKeywords = [
     'EXPLAIN',
     'RAISE',
     'PRAGMA',
+    'AUTOINCREMENT'
 ];
 
 const sqliteFunctions = [

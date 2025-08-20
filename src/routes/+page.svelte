@@ -41,6 +41,7 @@
 
     let isMounted = false; // prevent fouc
     onMount(async () => {
+        value = localStorage.getItem('sqliteEditor.value') ?? '';
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
         const sqlite3: SQLite3 = await initSqlite();
         db = new sqlite3.oo1.DB(':localStorage:', '');
@@ -129,10 +130,6 @@
     }
 
     let snippetsOpen = false;
-    function applySnippet(sql: string) {
-        value += sql;
-        snippetsOpen = false;
-    }
 </script>
 
 <svelte:head>
@@ -185,6 +182,7 @@
                             switch (event.detail.path) {
                                 case 'default.sql':
                                     sql = event.detail.value;
+                                    localStorage.setItem('sqliteEditor.value', event.detail.value);
                                     break;
                                 default:
                                     throw new Error(`File ${event.detail.path} not found.`);
