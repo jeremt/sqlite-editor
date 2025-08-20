@@ -1,8 +1,11 @@
 {
     "run": "RUN",
+    "back": "BACK",
     "run_selection": "RUN SELECTION",
     "clear": "CLEAR",
     "download": "DOWNLOAD",
+    "copied": "COPIED !",
+    "copySql": "COPY SQL",
     "result": {
         "success": "Success. No rows returned",
         "emptyState": "Use <strong>RUN {cmdOrCtrl}⏎</strong> to execute your SQL query."

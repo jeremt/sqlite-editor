@@ -1,8 +1,11 @@
 {
     "run": "EXÉCUTER",
+    "back": "RETOUR",
     "run_selection": "EXÉCUTER LA SÉLECTION",
     "clear": "EFFACER",
     "download": "TÉLÉCHARGER",
+    "copySql": "COPIER LE SQL",
+    "copied": "COPIÉ !",
     "result": {
         "success": "Succès. Aucune ligne retournée",
         "emptyState": "Utilise le bouton <strong>EXÉCUTER {cmdOrCtrl}⏎</strong> pour appliquer ton code SQL."

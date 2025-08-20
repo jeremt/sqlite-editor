@@ -17,6 +17,7 @@
     import {SplitPane} from '@rich_harris/svelte-split-pane';
     import type {Schema} from '$lib/editor/addSqliteAutocomplete';
     import {browser} from '$app/environment';
+    import SnippetDialog from './SnippetDialog.svelte';
 
     export let data;
 
@@ -95,7 +96,7 @@
                     return {...result, [tableName]: result[tableName] ? [...result[tableName], columnName] : [columnName]};
                 }, {} as Schema);
             tables = Object.keys(schema);
-            selectedTableName = tableName && tables.includes(tableName) ? tableName ?? tables[0] : tables[0];
+            selectedTableName = tableName && tables.includes(tableName) ? (tableName ?? tables[0]) : tables[0];
             if (selectedTableName) {
                 const rows = db.exec(`SELECT * from "${selectedTableName}"`, {rowMode: 'object'});
                 selectedTable = rows;
@@ -110,7 +111,7 @@
     let downloadOpen = false;
     let dbDump = '';
     let includeData = true;
-    $: updateDbDump(), includeData, db, downloadOpen;
+    $: (updateDbDump(), includeData, db, downloadOpen);
     async function updateDbDump() {
         if (!db) {
             return;
@@ -269,18 +270,7 @@
 </Dialog>
 
 <Dialog bind:isOpen={snippetsOpen} on:requestclose={() => (snippetsOpen = false)}>
-    <div class="dialog-header">
-        <button class="btn" style:--fg="var(--color-fg)" style:--bg="var(--color-bg-1)" on:click={() => (snippetsOpen = false)}>ESC</button>
-    </div>
-    <div class="dialog-content grid" style:--col="12rem" style:width="45rem">
-        {#each data.snippets as snippet}
-            <button class="snippet-card" on:click={() => applySnippet(snippet.sql)}>
-                <h2>{$_(`snippets.${snippet.key}.title`)}</h2>
-                <p>{$_(`snippets.${snippet.key}.description`)}</p>
-            </button>
-        {/each}
-    </div>
-    <div class="title" style:color="var(--color-fg-1)" style:text-align="center">Clique sur un snippet pour l'insérer dans l'éditeur</div>
+    <SnippetDialog bind:isOpen={snippetsOpen} />
 </Dialog>
 
 <style>
@@ -393,39 +383,5 @@
         padding: 0 1rem;
         text-align: center;
         color: var(--color-fg-1);
-        & > a {
-            color: var(--color-primary);
-        }
-    }
-
-    .grid {
-        gap: 1rem;
-    }
-
-    .snippet-card {
-        color: var(--color-fg);
-        text-align: left;
-        font-family: var(--font-ui);
-        padding: 1rem;
-        border-radius: 1rem;
-        background-color: var(--color-bg-1);
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: 0.3s all;
-        &:hover {
-            border: 2px solid var(--color-fg);
-        }
-        & > h2 {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-        & > p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--color-fg-1);
-        }
     }
 </style>

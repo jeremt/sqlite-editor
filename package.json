@@ -43,7 +43,7 @@
         "remark-parse": "^11.0.0",
         "remark-rehype": "^11.1.2",
         "remark-unwrap-images": "^4.0.1",
-        "shiki": "^1.29.2",
+        "shiki": "^3.10.0",
         "svelte-i18n": "^4.0.1",
         "unified": "^11.0.5",
         "vite-plugin-svelte%4": "link:@sveltejs/vite-plugin-svelte%4"

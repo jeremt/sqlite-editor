@@ -341,4 +341,4 @@ SELECT
         key: 'listTables',
         sql: `SELECT tbl_name FROM sqlite_master WHERE type = 'table';`,
     },
-];
+] as const;
