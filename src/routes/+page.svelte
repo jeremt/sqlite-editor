@@ -40,7 +40,9 @@
     let selection = '';
 
     let isMounted = false; // prevent fouc
+    let cmdOrCtrl = 'Ctrl';
     onMount(async () => {
+        cmdOrCtrl = navigator.userAgent.includes('Mac OS') ? '⌘' : 'Ctrl';
         value = localStorage.getItem('sqliteEditor.value') ?? '';
         const {default: initSqlite} = await import('$lib/sqlite/sqlite3.mjs');
         const sqlite3: SQLite3 = await initSqlite();
@@ -220,7 +222,7 @@
                             {:else}
                                 <div class="info">
                                     {@html $_('result.emptyState', {
-                                        values: {cmdOrCtrl: browser && navigator.userAgent.includes('Mac OS') ? '⌘' : 'Ctrl'},
+                                        values: {cmdOrCtrl},
                                     })}
                                 </div>
                             {/if}
